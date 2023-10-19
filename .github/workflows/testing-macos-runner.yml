@@ -1,0 +1,34 @@
+name: UI Automation Smoke Tests
+env:
+  TEST_BROWSER: 'chrome'
+  TEST_ENVIRONMENT: 'staging'
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run_tests_macos:
+
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set Up Java Environment
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - uses: browser-actions/setup-chrome@latest
+      
+      - name: check old value 
+        run: |
+           system_profiler SPDisplaysDataType | grep Resolution
+      - name: screen resolution
+        run: |
+          "/Library/Application Support/VMware Tools/vmware-resolutionSet" 2560 1440
+      - name: new value
+        run: |
+           system_profiler SPDisplaysDataType | grep Resolution
